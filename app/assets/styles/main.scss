@@ -1,0 +1,308 @@
+$icon-font-path: '../fonts/';
+
+// bower:scss
+@import "bootstrap";
+@import "typography";
+@import "variables";
+// endbower
+
+* {
+  font-family: 'Ubuntu', sans-serif;
+  -webkit-font-smoothing: antialiased !important;
+  font-smooth: antialiased !important;
+}
+
+a {
+  text-decoration: none;
+  &:hover, &:link {
+    text-decoration: none;
+  }
+}
+
+// "Desabilita" o responsivo
+.container {
+  min-width: 1200px !important;
+}
+
+::selection {
+  background-color: $cor-verde-logo;
+  color: #FFF;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.8;
+  }
+}
+
+.btn {
+  color: #FFF;
+  text-transform: uppercase;
+  border: 2px solid $cor-cinza-2;
+  font-family: 'CircularStdBlack', 'Ubuntu', sans-serif;
+  line-height: $btn-height;
+  border-radius: $btn-height;
+  padding-left: 30px;
+  padding-right: 30px;
+  transition: color 300ms, background-color 300ms;
+  &:hover {
+    color: $cor-verde-logo;
+    background-color: $cor-bg-icone-redes;
+  }
+  &:visited, &:link {
+    color: #FFF;
+  }
+  &.submit {
+    border: none;
+    color: #FFF;
+    background-color: $cor-verde-logo;
+    transition: background-color 300ms;
+    &:hover {
+      background-color: darken($cor-verde-logo, 10%);
+    }
+    // Estilo para botões que estão enviando algo de maneira assíncrona
+    &.aguarde {
+      animation: blink 500ms infinite alternate;
+    }
+  }
+}
+
+.redes {
+  [class*=icon] {
+    padding: $padding-icon-redes;
+    border-radius: 50%;
+    background-color: $cor-bg-icone-redes;
+  }
+  .icon-instagram {
+    &:before {
+      // Corrige o posicionamento do ícone para que não pareça torto
+      position: relative;
+      top: 1px;
+      font-size: 17px;
+    }
+  }
+}
+
+.w-vitrine {
+  position: relative;
+  height: 640px;
+  background: $cor-cinza-1 url('../../images/vitrine@2x.jpg') no-repeat center center;
+  background-size: 1600px;
+}
+
+.w-nav-topo {
+  z-index: 200;
+  position: absolute;
+  width: 100%;
+  top: 0;
+  background-color: transparent;
+  transition: top 400ms, background-color 300ms ease;
+  .nav-topo {
+    .w-links {
+      .links {
+        text-transform: uppercase;
+        text-align: center;
+        list-style-type: none;
+        -webkit-padding-start: 0;
+        margin: 25px 0;
+        li {
+          margin: 0 30px 0;
+          display: inline-block;
+          line-height: 62px;
+          a {
+            border: none;
+            transition: color 300ms;
+            &:not(.icon-rede) {
+              &:hover, &.active {
+                color: $cor-verde-logo;
+              }
+            }
+            font-family: 'CircularStdBlack', sans-serif;
+            display: inline-block;
+            color: #FFF;
+          }
+        }
+      }
+    }
+  }
+  // Animação do topo fixo
+  &.fixed-menu {
+    background-color: $cor-cinza-1;
+  }
+}
+
+.w-texto-vitrine {
+  .texto-vitrine {
+    margin-top: 450px;
+    text-align: center;
+    .texto {
+      text-transform: uppercase;
+      font-family: 'CircularStdBold', 'Ubuntu', 'sans-serif';
+      color: $cor-verde-logo;
+      font-size: 2rem;
+      letter-spacing: 1rem;
+      margin-bottom: 45px;
+    }
+  }
+}
+
+.w-btn-inscreva-se {
+  .btn-inscreva-se {
+    text-align: center;
+  }
+}
+
+.w-bloco {
+  padding: 64px 0;
+  .bloco {
+    .title {
+      font-size: 24px;
+      color: #FFF;
+      letter-spacing: 13px;
+      text-transform: uppercase;
+      text-align: center;
+      font-family: "GothamBoldRegular", sans-serif;
+      margin-bottom: 26px;
+    }
+    .descricao {
+      color: $cor-texto-bloco-descricao;
+      font-size: 16px;
+      line-height: 3rem;
+      padding: 0 100px;
+      margin: 0;
+      margin-bottom: 30px;
+    }
+  }
+  // Blocos específicos
+  &.conferencia {
+    background-color: $cor-bg-bloco-conferencia;
+  }
+  &.tema {
+    background-color: $cor-bg-bloco-tema;
+    .frame-video {
+      height: 500px;
+      background-color: $cor-cinza-5;
+    }
+  }
+  &.convidados {
+    background-color: $cor-bg-bloco-convidados;
+    .foto-convidado {
+      height: 200px;
+      background-color: $cor-cinza-3;
+    }
+    .nome-convidado {
+      margin-top: 48px;
+      font-family: "GothamBoldRegular", sans-serif;
+      color: $cor-verde-logo;
+      text-align: center;
+      text-transform: uppercase;
+    }
+    .descricao {
+      padding: 0;
+      text-align: left;
+    }
+  }
+  &.inscricoes {
+    background-color: #FFF;
+    color: $cor-cinza-7;
+
+    .title {
+      color: $cor-cinza-6;
+    }
+    .descricao {
+      text-align: center;
+      line-height: 2rem;
+    }
+  }
+}
+
+.form-inscricao {
+  .submit {
+    margin-top: 40px;
+    line-height: 40px;
+    min-width: 212px;
+    &.sucesso {
+      background-color: $cor-cinza-6;
+    }
+  }
+  .aviso {
+    font-size: 16px;
+    text-align: center;
+    margin-top: 30px;
+    padding: 30px 0;
+    background-color: $cor-cinza-9;
+  }
+}
+
+footer {
+  &.main-footer {
+    text-align: center;
+    background-color: $cor-cinza-4;
+    padding: 45px 0;
+    color: #FFF;
+    .redes {
+
+    }
+    ul {
+      list-style-type: none;
+      -webkit-padding-start: 0;
+      margin-bottom: 0;
+      li {
+        display: inline-flex;
+        line-height: 45px;
+        font-size: 18px;
+        &:not(:first-child) {
+          padding-left: 25px;
+        }
+        &:not(:last-child) {
+          padding-right: 25px;
+          border-right: 1px solid $cor-cinza-3;
+        }
+        .redes {
+          padding-left: 20px;
+          .link-rede:first-child {
+            padding-right: 10px;
+          }
+          .icon-instagram {
+            &:before {
+              // Corrige o posicionamento do ícone para que não pareça torto
+              position: relative;
+              top: 0;
+              font-size: 19px;
+            }
+          }
+        }
+      }
+      li, a {
+        color: #FFF;
+      }
+    }
+  }
+}
+
+// Formulários
+.form {
+  label {
+    display: block;
+    font-size: 16px;
+    font-weight: normal;
+  }
+  input.form-control {
+    border: 2px solid $cor-cinza-7;
+    line-height: 45px;
+    height: 45px;
+    border-radius: 0;
+    box-shadow: none;
+    width: 100%;
+    transition: border-color 300ms;
+    &:focus {
+      box-shadow: none;
+      border-color: $cor-cinza-3;
+    }
+  }
+}
+
+@import "plugins-custom";

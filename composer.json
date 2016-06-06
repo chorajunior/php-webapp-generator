@@ -1,0 +1,17 @@
+{
+    "name": "juniorgarcia/phpgenerator",
+    "authors": [
+        {
+            "name": "Júnior Garcia",
+            "email": "itamarjr91@gmail.com"
+        }
+    ],
+    "require": {
+        "vlucas/phpdotenv": "*",
+        "twig/twig": "~1.0",
+        "silex/silex": "~2.0"
+    },
+    "config": {
+        "vendor-dir": "app/vendor"
+    }
+}

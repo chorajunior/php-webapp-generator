@@ -1,0 +1,27 @@
+.bx-wrapper {
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  border: none;
+  margin: 0 auto;
+  background-color: transparent;
+  // Correção de "bug" no código do próprio bxSlider
+  .bx-loading {
+    background-image: url('../../images/bx_loader.gif');
+  }
+  .bx-pager {
+    &.bx-default-pager {
+      bottom: -20px;
+      a {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        border: 2px solid $cor-bullet-slider-ativo;
+        background-color: $cor-cinza-1;
+        &.active {
+          background-color: $cor-bullet-slider-ativo;
+        }
+      }
+    }
+  }
+}
