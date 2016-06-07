@@ -1,47 +1,8 @@
 @font-face {
-  font-family: 'conferenciavida';
-  src:    url('../../fonts/conferenciavida.eot?c4anka');
-  src:    url('../../fonts/conferenciavida.eot?c4anka#iefix') format('embedded-opentype'),
-  url('../../fonts/conferenciavida.ttf?c4anka') format('truetype'),
-  url('../../fonts/conferenciavida.woff?c4anka') format('woff'),
-  url('../../fonts/conferenciavida.svg?c4anka#conferenciavida') format('svg');
-  font-weight: normal;
-  font-style: normal;
+  font-family: "GothamBoldRegular";
+  src: url("../fonts/GothamBold-Regular.ttf") format("truetype");
 }
 
-[class^="icon-"], [class*=" icon-"] {
-  /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: 'conferenciavida' !important;
-  speak: none;
-  font-style: normal;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-
-  /* Better Font Rendering =========== */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-.icon-facebook:before {
-  content: "\ea90";
-}
-.icon-instagram:before {
-  content: "\ea92";
-}
-
-@font-face {
-  font-family: 'CircularStdBlack';
-  src: url('../../fonts/CircularStd-Black.otf') format('opentype');
-}
-
-@font-face {
-  font-family: 'CircularStdBold';
-  src: url('../../fonts/CircularStd-Bold.otf') format('opentype');
-}
-
-@font-face {
-  font-family: 'GothamBoldRegular';
-  src: url('../../fonts/GothamBold-Regular.ttf') format('truetype');
+h1, h2, h3, h4, h5 {
+  font-family: "GothamBoldRegular", sans-serif;
 }

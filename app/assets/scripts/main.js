@@ -1,4 +1,3 @@
-'use strict';
 /* ========================================================================
  * DOM-based Routing
  * Based on http://goo.gl/EUTi53 by Paul Irish
@@ -19,70 +18,7 @@
     // All pages
     'common': {
       init: function() {
-        var $wrapperMenuLinks = $( '.w-nav-topo' ),
-            $formInscricao = $( '.form-inscricao' );
-
-        // Controla o menu flutuante
-        $( window ).on( 'scroll', function() {
-            var currentPosition = $( this ).scrollTop(),
-              scrollLimit = $wrapperMenuLinks.outerHeight();
-          if( currentPosition >= scrollLimit * 2 ) {
-            $wrapperMenuLinks.addClass( 'fixed-menu' );
-            $wrapperMenuLinks.css( 'top', currentPosition );
-          } else {
-            $wrapperMenuLinks.css( 'top', 0 );
-            $wrapperMenuLinks.removeClass( 'fixed-menu' );
-          }
-        } );
-
-        $( '.w-links a:not( .link-rede )' ).click( function() {
-          $( '.w-links a' ).removeClass( 'active' );
-          $( this ).addClass( 'active' );
-        } );
-
-        // Inicializa o slider dos convidados
-        $( '.lista-convidados' ).bxSlider( {
-          minSlides: 3,
-          maxSlides: 3,
-          auto: true,
-          controls: false,
-          pause: 4000,
-          autoHover: true,
-          slideWidth: $( '.w-lista-convidados' ).width() / 3
-        } );
-
-        // Configura as âncoras dos menus
-        $( 'a[data-ancora]' ).on( 'click', function( e ) {
-          e.preventDefault();
-          $( 'html, body' ).animate( {
-            scrollTop: $( '#' + $( this ).attr( 'data-ancora' ) ).offset().top - $wrapperMenuLinks.outerHeight()
-          }, 400, 'swing' );
-        } );
-
-        // Envio de inscrição
-        $formInscricao.submit( function( e ) {
-          var $submit = $( this ).find( ':submit' ),
-              submitText = $submit.attr( 'value' );
-          e.preventDefault();
-          $submit
-              .attr( 'value', 'Aguarde...' )
-              .addClass( 'aguarde' );
-
-          $.post( $( this ).attr( 'action' ), $( this ).serializeArray(), function( data ) {
-            $submit
-                .attr( 'value', submitText )
-                .removeClass( 'aguarde' );
-
-            if ( data.status == true ) {
-              $submit
-                  .attr( 'disabled', true )
-                  .attr( 'value', 'Inscrição efetuada' )
-                  .addClass( 'sucesso' );
-            } else {
-              alert( 'Houve um erro no envio, mano :(' );
-            }
-          } );
-        } );
+        // JavaScript to be fired on all pages
       },
       finalize: function() {
         // JavaScript to be fired on all pages, after page specific JS is fired

@@ -27,6 +27,9 @@ if (DEBUG) {
 // Configuring the globals for the Twig. These can be overridden
 $app['twig']->addGlobal('siteTitle', getenv('SITE_TITLE'));
 
+$assets = new PHPAppGenerator\Assets();
+var_dump($assets->getScript("a.js"));
+
 /************************************************* Application routes. ************************************************/
 $app->get('/', function() use($app) {
     return $app['twig']->render('index.twig');

@@ -1,14 +1,17 @@
-var gulp = require('gulp');
-var gulpLoadPlugins = require('gulp-load-plugins');
-var browserSync = require('browser-sync');
-var del = require('del');
-var wiredep = require('wiredep').stream;
-var mainBowerfiles = require('main-bower-files');
-var $ = gulpLoadPlugins();
-var reload = browserSync.reload;
+var gulp = require('gulp'),
+    gulpLoadPlugins = require('gulp-load-plugins'),
+    browserSync = require('browser-sync'),
+    del = require('del'),
+    wiredep = require('wiredep').stream,
+    mainBowerfiles = require('main-bower-files'),
+    manifest = require('asset-builder')('./app/assets/manifest.json'),
+    $ = gulpLoadPlugins(),
+    reload = browserSync.reload;
+
+console.log(manifest);
 
 gulp.task('styles', function() {
-  return gulp.src('assets/styles/*.scss')
+  return gulp.src('app/assets/styles/*.scss')
     .pipe($.plumber())
     .pipe($.sourcemaps.init())
     .pipe($.sass.sync({
@@ -18,7 +21,7 @@ gulp.task('styles', function() {
     }).on('error', $.sass.logError))
     .pipe($.autoprefixer({browsers: ['> 1%', 'last 2 versions', 'Firefox ESR']}))
     .pipe($.sourcemaps.write())
-    .pipe(gulp.dest('dist/styles/build'))
+    .pipe(gulp.dest('.tmp/assets/styles/'))
     .pipe(reload({stream: true}));
 });
 
@@ -28,7 +31,7 @@ gulp.task('scripts', function() {
     .pipe($.sourcemaps.init())
     .pipe($.babel())
     .pipe($.sourcemaps.write('.'))
-    .pipe(gulp.dest('dist/scripts/build'))
+    .pipe(gulp.dest('.tmp/assets/scrips/'))
     .pipe(reload({stream: true}));
 });
 
@@ -42,14 +45,7 @@ function lint(files, options) {
   };
 }
 
-var testLintOptions = {
-  env: {
-    mocha: true
-  }
-};
-
 gulp.task('lint', lint(['assets/scripts/**/*.js', '!assets/scripts/main.js']));
-gulp.task('lint:test', lint('test/spec/**/*.js', testLintOptions));
 
 gulp.task('phplib', function() {
   return gulp.src('./vendor/**/*.*')
