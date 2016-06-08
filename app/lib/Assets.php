@@ -93,8 +93,23 @@ class Assets
         return self::getAsset(self::getAssetPathByType('script') . '/' . $script);
     }
 
-    // TODO Function to get styles
-    // TODO Function to get fonts
-    // TODO Function to get images
-    // TODO Function to get assets based in the environment.
+    /**
+     * Returns the style based on the configured path
+     * @param string $style The script name or path.
+     * @return string
+     */
+    public static function getStyle($style)
+    {
+        return self::getAsset(self::getAssetPathByType('style') . '/' . $style);
+    }
+
+    /**
+     * Returns the image based on the configured path
+     * @param string $image The script name or path.
+     * @return string
+     */
+    public static function getImage($image)
+    {
+        return self::getAsset(self::getAssetPathByType('image') . '/' . $image);
+    }
 }
