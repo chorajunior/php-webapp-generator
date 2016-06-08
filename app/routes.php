@@ -1,5 +1,7 @@
 <?php
 
+use PHPAppGenerator\Assets;
+
 /******************************************** Loading the PHP dependencies. *******************************************/
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -25,14 +27,24 @@ if (DEBUG) {
 }
 
 // Configuring the globals for the Twig. These can be overridden
-$app['twig']->addGlobal('siteTitle', getenv('SITE_TITLE'));
+$twig = $app['twig'];
+$twig->addGlobal('siteTitle', getenv('SITE_TITLE'));
 
-$assets = new PHPAppGenerator\Assets();
-var_dump($assets->getScript("a.js"));
+// Adding assets functions to Twig Environment
+$assets = new Assets();
+$twig->addFunction(new Twig_SimpleFunction('script', function($script) {
+    echo Assets::getScript($script);
+}));
+$app['twig']->addFunction('style', new Twig_SimpleFunction('style', function($style) {
+    echo Assets::getScript($style);
+}));
+$app['twig']->addFunction('image', new Twig_SimpleFunction('image', function($image) {
+    echo Assets::getScript($image);
+}));
 
 /************************************************* Application routes. ************************************************/
-$app->get('/', function() use($app) {
-    return $app['twig']->render('index.twig');
+$app->get('/', function() use($twig) {
+    return $twig->render('index.twig');
 });
 
 // Start routing.

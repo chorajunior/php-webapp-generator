@@ -7,8 +7,7 @@
 
 namespace PHPAppGenerator;
 
-
-use Dotenv\Exception\ValidationException;
+use Silex\Provider\VarDumperServiceProvider;
 
 class Assets
 {
@@ -30,8 +29,8 @@ class Assets
             'development' => getenv('ASSETS_PATH_DEVELOPMENT'),
             'production' => getenv('ASSETS_PATH_PRODUCTION'),
         );
-        self::$baseAppDir = $_SERVER['DOCUMENT_ROOT'];
 
+        self::$baseAppDir = $_SERVER['DOCUMENT_ROOT'];
         self::$scriptsFolder = getenv('SCRIPTS_FOLDER');
         self::$stylesFolder = getenv('STYLES_FOLDER');
         self::$imagesFolder = getenv('IMAGES_FOLDER');
@@ -54,8 +53,7 @@ class Assets
      */
     public static function getAsset($path)
     {
-        $fullPath = self::getBaseAppDir() . $path;
-        return file_exists($fullPath) ? $fullPath : '';
+        return file_exists(self::getBaseAppDir() . $path) ? '/' . $path: '';
     }
 
     /**
@@ -111,5 +109,10 @@ class Assets
     public static function getImage($image)
     {
         return self::getAsset(self::getAssetPathByType('image') . '/' . $image);
+    }
+
+    public static function getFunctions()
+    {
+        return self::getAsset;
     }
 }
