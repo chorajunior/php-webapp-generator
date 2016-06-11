@@ -36,10 +36,13 @@ $twig->addFunction(new Twig_SimpleFunction('script', function($script) {
     echo Assets::getScript($script);
 }));
 $app['twig']->addFunction('style', new Twig_SimpleFunction('style', function($style) {
-    echo Assets::getScript($style);
+    echo Assets::getStyle($style);
 }));
 $app['twig']->addFunction('image', new Twig_SimpleFunction('image', function($image) {
-    echo Assets::getScript($image);
+    echo Assets::getImage($image);
+}));
+$app['twig']->addFunction('font', new Twig_SimpleFunction('font', function($font) {
+    echo Assets::getImage($font);
 }));
 
 /************************************************* Application routes. ************************************************/

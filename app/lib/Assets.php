@@ -110,9 +110,4 @@ class Assets
     {
         return self::getAsset(self::getAssetPathByType('image') . '/' . $image);
     }
-
-    public static function getFunctions()
-    {
-        return self::getAsset;
-    }
 }

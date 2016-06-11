@@ -16,5 +16,12 @@
     "jquery.js": {
       "bower": ["jquery"]
     }
+  },
+  "config": {
+    "devUrl": "php-generator.dev"
+  },
+  "paths": {
+    "source": "app/assets",
+    "dist": "app/dist/assets"
   }
 }
