@@ -8,9 +8,9 @@
   "overrides": {
     "bootstrap-sass": {
       "main": [
-        "app/stylesheets/_bootstrap.scss",
-        "app/fonts/bootstrap/*",
-        "app/javascripts/bootstrap.js"
+        "assets/stylesheets/_bootstrap.scss",
+        "assets/javascripts/bootstrap.js",
+        "assets/fonts/**/*.*"
       ]
     }
   }
