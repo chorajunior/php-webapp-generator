@@ -3,15 +3,20 @@
 {% include('incs/head.twig') %}
 <body>
 <div class="container">
-    <h1>PHP App Generator</h1>
-    <p>
-        Hello! Inside here you can import your templates and put your content. Change this structure the way you prefer.
-    </p>
-    <p>
-        Inside <code>incs/scriptsAndStyles.twig</code> template, we added Bootstrap only as example. I think that's all.
-    </p>
+    {% block content %}
+        <h1>PHP App Generator</h1>
+        <p>
+            Hello! Inside here you can import your templates and put your content. Change this structure the way you prefer.
+        </p>
+        <p>
+            Inside <code>incs/scriptsAndStyles.twig</code> template, we added Bootstrap only as example. I think that's all.
+        </p>
+        {% block sliderTest %}{% endblock %}
+    {%  endblock %}
+    {% block footer %}
+        {% include('incs/scriptsAndStyles.twig') %}
+    {% endblock footer %}
 </div>
 {# Your scripts and styles in here #}
-{% include('incs/scriptsAndStyles.twig') %}
 </body>
 </html>

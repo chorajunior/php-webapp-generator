@@ -1,4 +1,16 @@
-{% include('base.twig') %}
+{% extends('base.twig') %}
 
-<link rel="stylesheet" href="{{ style('app.css') }}">
-<script src="{{ script('app.js') }}"></script>
+{% block sliderTest %}
+    <h2>This is just to test plugins resources</h2>
+    <div class="slides">
+        <img src="{{ image('pic1.jpeg') }}" alt="Picture 1">
+        <img src="{{ image('pic2.jpeg') }}" alt="Picture 2">
+    </div>
+{% endblock %}
+
+{% block footer %}
+    <link rel="stylesheet" href="{{ style('app.css') }}">
+    <link rel="stylesheet" href="{{ style('plugins.css') }}">
+    <script src="{{ script('plugins.js') }}"></script>
+    <script src="{{ script('app.js') }}"></script>
+{% endblock %}

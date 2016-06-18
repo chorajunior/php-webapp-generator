@@ -1,6 +1,6 @@
 //initialize all of our variables
 var app, concat, gulp, gutil, sass, uglify, imagemin, minifyCSS, del, browserSync, autoprefixer, gulpSequence,
-    sourceMaps, plumber, manifest, mainBowerFiles, fontExtensions;
+    sourceMaps, plumber, manifest, replace, mainBowerFiles, fontExtensions, imagesExtensions;
 
 var autoPrefixBrowserList = ['last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'];
 
@@ -15,16 +15,22 @@ sass        = require('gulp-sass');
 sourceMaps  = require('gulp-sourcemaps');
 imagemin    = require('gulp-imagemin');
 minifyCSS   = require('gulp-minify-css');
-browserSync = require('browser-sync');
+browserSync = require('browser-sync').create();
 autoprefixer = require('gulp-autoprefixer');
 gulpSequence = require('gulp-sequence').use(gulp);
 plumber     = require('gulp-plumber');
 manifest = require('asset-builder')('app/assets/manifest.json');
+replace = require('gulp-replace');
 mainBowerFiles     = require('main-bower-files');
 fontExtensions = '*.{ttf,otf,eot,woff,woff2,svg}';
+imagesExtensions = '*.{jpg,jpeg,png,gif}';
 
-gulp.task('browserSync', function() {
-    browserSync({
+var regexes = {
+    css: /(url|src)\((['"]?)(.*(\/)(.*[gif|jpeg|jpg|png])(['"]?)\))/gm
+};
+
+gulp.task('watch', ['plugins', 'scripts', 'styles', 'images', 'fonts'], function() {
+    browserSync.init({
         proxy: manifest.config.devUrl,
         options: {
             reloadDelay: 250
@@ -40,7 +46,7 @@ gulp.task('images-deploy', function() {
     gulp.src(manifest.paths.source + '/images/**/*.{jpg,jpeg,png}')
         //prevent pipe breaking caused by errors from gulp plugins
         .pipe(plumber())
-        .pipe(imagemin({ optimizationLevel: 5, progressive: true, interlaced: true }))
+        .pipe(imagemin({ optimizationLevel: 9, progressive: true, interlaced: true }))
         .pipe(gulp.dest(manifest.paths.dist + '/images'));
 });
 
@@ -132,11 +138,31 @@ gulp.task('styles-deploy', function() {
 });
 
 // Handling plugin files
-gulp.task('plugin-fonts', function(){
-    console.log(mainBowerFiles(['/**/' + fontExtensions]));
+gulp.task('plugins-fonts', function(){
+    return gulp.src(mainBowerFiles(['/**/' + fontExtensions]))
+        .pipe(gulp.dest(manifest.paths.dist + '/fonts'));
 });
 
-// TODO Other plugin-related tasks
+gulp.task('plugins-scripts', function(){
+   return gulp.src(mainBowerFiles(['/**/*.js']))
+        .pipe(concat('plugins.js'))
+        .pipe(gulp.dest(manifest.paths.dist + '/scripts'));
+});
+
+// This task has a "special" feature: It replaces the images / fonts paths based on our structure.
+gulp.task('plugins-styles', function(){
+    return gulp.src(mainBowerFiles(['/**/*.css']))
+        .pipe(concat('plugins.css'))
+        .pipe(replace(regexes.css,'$1($2../images/$5$2)'))
+        .pipe(gulp.dest(manifest.paths.dist + '/styles'));
+});
+
+gulp.task('plugins-images', function(){
+    return gulp.src(mainBowerFiles(['/**/' + imagesExtensions]))
+        .pipe(gulp.dest(manifest.paths.dist + '/images'));
+});
+
+gulp.task('plugins', ['plugins-fonts', 'plugins-scripts', 'plugins-styles', 'plugins-images']);
 
 //cleans our dist directory in case things got deleted
 gulp.task('clean', function() {
@@ -149,8 +175,7 @@ gulp.task('clean', function() {
 //  startup the web server,
 //  start up browserSync
 //  compress all scripts and SCSS files
-gulp.task('default', ['browserSync', 'scripts', 'styles', 'images', 'fonts'], function() {
-    console.log(manifest.paths.source);
+gulp.task('default', ['watch'], function() {
     //a list of watchers, so it will watch all of the following files waiting for changes
     gulp.watch(manifest.paths.source + '/scripts/**', ['scripts']);
     gulp.watch(manifest.paths.source + '/styles/**', ['styles']);

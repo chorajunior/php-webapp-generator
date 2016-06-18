@@ -20,6 +20,7 @@
       init: function() {
         // JavaScript to be fired on all pages
         console.log( 'PHP App Generator says "Hi!"' );
+        $( '.slides' ).bxSlider();
       },
       finalize: function() {
         // JavaScript to be fired on all pages, after page specific JS is fired
