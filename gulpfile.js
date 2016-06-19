@@ -130,12 +130,8 @@ gulp.task( 'plugins-images', function () {
 } );
 
 // Just a shortcut to prepare the app's assets
-gulp.task( 'app-assets', function() {
-    runSequence( 'scripts', 'styles', 'images', 'fonts' );
-} );
-gulp.task( 'plugins', function() {
-    runSequence( 'plugins-fonts', 'plugins-scripts', 'plugins-styles', 'plugins-images' );
-} );
+gulp.task( 'app-assets', [ 'scripts', 'styles', 'images', 'fonts' ] );
+gulp.task( 'plugins', [ 'plugins-fonts', 'plugins-scripts', 'plugins-styles', 'plugins-images' ] );
 
 gulp.task( 'clean', function () {
     return del( [ 'app/dist' ] );
@@ -150,19 +146,6 @@ gulp.task( 'watch', [ 'clean ', 'plugins', 'browserSync' ], function () {
 } );
 
 // Build tasks
-// Pre-build tasks: cleaning, organizing the app's assets, and plugin assets.
-gulp.task( 'pre-build', function () {
-    runSequence(
-        'clean',
-        'app-assets',
-        'plugins',
-        'scripts-deploy',
-        'styles-deploy',
-        'images-deploy',
-        'fonts'
-    );
-} );
-
 gulp.task( 'hash-assets', function() {
     // Generating hashes of the resources after all of them are placed on dist folder.
     var assetsList = ['images', 'scripts', 'styles', 'fonts'],
@@ -185,5 +168,16 @@ gulp.task( 'hash-assets', function() {
 } );
 
 gulp.task( 'build', function () {
-    runSequence( 'pre-build', 'hash-assets' );
+    runSequence(
+        'clean',
+        [
+            'app-assets',
+            'plugins',
+            'scripts-deploy',
+            'styles-deploy',
+            'images-deploy',
+            'fonts'
+        ],
+        'hash-assets'
+    );
 } );
