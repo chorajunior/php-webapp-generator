@@ -12,12 +12,15 @@ use Silex\Provider\VarDumperServiceProvider;
 class Assets
 {
     // The main paths
-    public static $assetsBasePaths = array();
+    public static $assetsFolder;
     public static $baseAppDir;
     public static $scriptsFolder;
     public static $stylesFolder;
     public static $imagesFolder;
     public static $fontsFolder;
+    public static $buildDir;
+    public static $distDir;
+    public static $manifestFileContent;
 
     // The asset types
     private static $validAssetTypes = array('script', 'style', 'image', 'font');
@@ -25,25 +28,16 @@ class Assets
     public function __construct()
     {
         // Initializing the variables that point to the default folders
-        self::$assetsBasePaths = array(
-            'development' => getenv('ASSETS_PATH_DEVELOPMENT'),
-            'production' => getenv('ASSETS_PATH_PRODUCTION'),
-        );
-
+        self::$assetsFolder = getenv('ASSETS_DIR');
+        self::$buildDir = getenv('BUILD_DIR');
+        self::$distDir = getenv('DIST_DIR');
         self::$baseAppDir = $_SERVER['DOCUMENT_ROOT'];
-        self::$scriptsFolder = getenv('SCRIPTS_FOLDER');
-        self::$stylesFolder = getenv('STYLES_FOLDER');
-        self::$imagesFolder = getenv('IMAGES_FOLDER');
-        self::$fontsFolder = getenv('FONTS_FOLDER');
-    }
+        self::$scriptsFolder = getenv('SCRIPTS_DIR');
+        self::$stylesFolder = getenv('STYLES_DIR');
+        self::$imagesFolder = getenv('IMAGES_DIR');
+        self::$fontsFolder = getenv('FONTS_DIR');
 
-    /**
-     * Returns the app's base dir. It is the entry point to the assets folder.
-     * @return string The app base dir
-     */
-    protected static function getBaseAppDir()
-    {
-        return self::$baseAppDir;
+        self::initManifestFile();
     }
 
     /**
@@ -53,7 +47,50 @@ class Assets
      */
     public static function getAsset($path)
     {
-        return file_exists(self::getBaseAppDir() . $path) ? '/' . $path: '';
+        if(getenv('ENV') == 'production') {
+            // Verifying the existence of the manifest with the asset's maps
+            if(self::manifestFileExists()) {
+                return self::getProductionAsset($path);
+            }
+        } else {
+            return 'app/' . self::$distDir . '/' . self::$assetsFolder . '/' . $path;
+        }
+        return null;
+    }
+
+
+    /**
+     * Returns the asset for production.
+     * @param string $path
+     * @return string The production asset.
+     */
+    private static function getProductionAsset($path)
+    {
+        $productionAssetPath = '';
+        if(array_key_exists($path, self::$manifestFileContent)) {
+            $productionAssetPath = self::$manifestFileContent[$path];
+        } else {
+            throw new \UnexpectedValueException("There is no asset in the manifest file with the identifier: \"{$path}\"");
+        }
+
+        return 'app/' .
+        self::$distDir
+        . '/' .
+        self::$assetsFolder
+        . '/' .
+        self::$buildDir
+        . '/' .
+        $productionAssetPath;
+    }
+
+    /**
+     * Verify the existence of the manifest file.
+     * @return bool
+     */
+    private static function manifestFileExists()
+    {
+        $manifestPath = self::$baseAppDir . 'app/' . self::$distDir . '/' . self::$assetsFolder . '/' . 'manifest.json';
+        return file_exists($manifestPath);
     }
 
     /**
@@ -61,24 +98,44 @@ class Assets
      * @param string $type The type of asset. Needs to be a valid one
      * @return string the found base path or empty string
      */
-    protected static function getAssetPathByType($type) {
+    private static function getAssetPathByType($type) {
+        $result = '';
         if(in_array($type, self::$validAssetTypes)) {
-            $currentPathEnv = self::$assetsBasePaths[getenv('ENV')];
             switch ($type) {
                 case 'script':
-                    return $currentPathEnv . '/' . self::$scriptsFolder;
+                    $result = self::$scriptsFolder;
+                    break;
                 case 'style':
-                    return $currentPathEnv . '/' . self::$stylesFolder;
+                    $result = self::$stylesFolder;
+                    break;
                 case 'image':
-                    return $currentPathEnv . '/' . self::$imagesFolder;
+                    $result = self::$imagesFolder;
+                    break;
                 case 'font':
-                    return $currentPathEnv . '/' . self::$fontsFolder;
+                    $result = self::$fontsFolder;
+                    break;
                 default:
-                    return '';
+                    break;
             }
         } else {
             throw new \UnexpectedValueException("Invalid asset type \"${type}\".");
         }
+
+        return $result;
+    }
+
+
+    /**
+     * Initializing the manifest file for the production assets.
+     */
+    private static function initManifestFile()
+    {
+        self::$manifestFileContent = json_decode(
+            file_get_contents(
+                self::$baseAppDir . 'app/' . self::$distDir . '/' . self::$assetsFolder . '/' . 'manifest.json'
+            ),
+            true
+        );
     }
 
     /**

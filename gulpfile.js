@@ -7,7 +7,7 @@ var gulp                  = require( 'gulp' ),
     sass                  = require( 'gulp-sass' ),
     sourceMaps            = require( 'gulp-sourcemaps' ),
     imagemin              = require( 'gulp-imagemin' ),
-    minifyCSS             = require( 'gulp-minify-css' ),
+    cleanCss             = require( 'gulp-clean-css' ),
     browserSync           = require( 'browser-sync' ).create(),
     autoprefixer          = require( 'gulp-autoprefixer' ),
     runSequence           = require( 'run-sequence' ),
@@ -92,16 +92,16 @@ gulp.task( 'styles', function () {
         .pipe( browserSync.reload( { stream: true } ) );
 } );
 
-// Compiling our SCSS files for deployment
+// Preparing the already compiled CSS files do production
 gulp.task( 'styles-deploy', function () {
-    return gulp.src( manifest.paths.dest + '/styles/*.css' )
+    return gulp.src( manifest.paths.dist + '/styles/*.css' )
         .pipe( plumber() )
         .pipe( autoprefixer( {
             browsers: autoPrefixBrowserList,
             cascade : true
         } ) )
-        .pipe( minifyCSS() )
-        .pipe( gulp.dest( manifest.paths.dist + '/styles/build' ) );
+        .pipe( cleanCss() )
+        .pipe( gulp.dest( manifest.paths.dist + '/styles' ) );
 } );
 
 // Handling plugin files
@@ -170,14 +170,13 @@ gulp.task( 'hash-assets', function() {
 gulp.task( 'build', function () {
     runSequence(
         'clean',
-        [
-            'app-assets',
-            'plugins',
-            'scripts-deploy',
-            'styles-deploy',
-            'images-deploy',
-            'fonts'
-        ],
+        'scripts-deploy',
+        'fonts',
+        'app-assets',
+        'plugins',
+        'styles-deploy',
         'hash-assets'
     );
 } );
+
+// TODO Function to replace the URLs in CSS files based on the manifest map.

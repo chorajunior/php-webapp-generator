@@ -41,9 +41,6 @@ $app['twig']->addFunction('style', new Twig_SimpleFunction('style', function($st
 $app['twig']->addFunction('image', new Twig_SimpleFunction('image', function($image) {
     echo Assets::getImage($image);
 }));
-$app['twig']->addFunction('font', new Twig_SimpleFunction('font', function($font) {
-    echo Assets::getImage($font);
-}));
 
 /************************************************* Application routes. ************************************************/
 $app->get('/', function() use($twig) {
