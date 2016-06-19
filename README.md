@@ -25,5 +25,4 @@ configure it as you wish. You **MUST** configure it.
 
 ## Projects we used as inspiration
 1. [Laravel](https://laravel.com/);
-2. [Sage Wordpress Theme](https://github.com/roots/sage);
-3. [Yeoman WebApp Generator](https://github.com/yeoman/generator-webapp/);
+2. [Sage Wordpress Theme](https://github.com/roots/sage).
