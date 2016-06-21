@@ -7,21 +7,27 @@ var gulp                  = require( 'gulp' ),
     sass                  = require( 'gulp-sass' ),
     sourceMaps            = require( 'gulp-sourcemaps' ),
     imagemin              = require( 'gulp-imagemin' ),
-    cleanCss             = require( 'gulp-clean-css' ),
+    cleanCss              = require( 'gulp-clean-css' ),
     browserSync           = require( 'browser-sync' ).create(),
     autoprefixer          = require( 'gulp-autoprefixer' ),
     runSequence           = require( 'run-sequence' ),
     assetsRev             = require( 'gulp-rev' ),
+    cssRev                = require( 'gulp-rev-css-url' ),
+    cssRebaseUrl          = require( 'gulp-css-rebase-urls' ),
     plumber               = require( 'gulp-plumber' ),
     manifest              = require( 'asset-builder' )( 'app/assets/config.json' ),
     replace               = require( 'gulp-replace' ),
     mainBowerFiles        = require( 'main-bower-files' ),
     autoPrefixBrowserList = [ 'last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4' ],
     fontExtensions        = '*.{ttf,otf,eot,woff,woff2,svg}',
-    imagesExtensions      = '*.{jpg,jpeg,png,gif}';
+    imagesExtensions      = '*.{jpg,jpeg,png,gif}',
+    // Manifest name and options for assets revisions
+    manifestRevName       = 'manifest.json',
+    manifestRevOptions    = { base: '.', merge: true };
 
 var regexes = {
-    css: /(url|src)\((['"]?)(.*(\/)(.*[gif|jpeg|jpg|png])(['"]?)\))/gm
+    // This regex is responsible for "cleaning" the paths for images
+    css: /(url|src)\((['"]?)(.*(\/)(.*[gif|jpeg|jpg|png])\2\))/gm
 };
 
 gulp.task( 'browserSync', [ 'plugins', 'scripts', 'styles', 'images', 'fonts' ], function () {
@@ -100,6 +106,7 @@ gulp.task( 'styles-deploy', function () {
             browsers: autoPrefixBrowserList,
             cascade : true
         } ) )
+        .pipe( cssRebaseUrl( { root : manifest.paths.dist + '/build' } ) )
         .pipe( cleanCss() )
         .pipe( gulp.dest( manifest.paths.dist + '/styles' ) );
 } );
@@ -159,11 +166,10 @@ gulp.task( 'hash-assets', function() {
     // Hashing to the build folder
     return gulp.src( globs, { base: manifest.paths.dist } )
         .pipe( assetsRev() )
+        // Replace assets to hashed versions referenced in CSS files
+        .pipe( cssRev() )
         .pipe( gulp.dest( manifest.paths.dist + '/build' ) )
-        .pipe( assetsRev.manifest( 'manifest.json', {
-            base: '.',
-            merge: true
-        } ) )
+        .pipe( assetsRev.manifest( manifestRevName, manifestRevOptions ) )
         .pipe( gulp.dest( manifest.paths.dist ) );
 } );
 
@@ -178,5 +184,3 @@ gulp.task( 'build', function () {
         'hash-assets'
     );
 } );
-
-// TODO Function to replace the URLs in CSS files based on the manifest map.
