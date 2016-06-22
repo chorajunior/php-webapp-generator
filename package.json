@@ -11,7 +11,6 @@
     "gulp-autoprefixer": "^3.0.2",
     "gulp-clean-css": "*",
     "gulp-concat": "^2.6.0",
-    "gulp-css-rebase-urls": "0.0.5",
     "gulp-imagemin": "^2.3.0",
     "gulp-plumber": "^1.0.1",
     "gulp-replace": "^0.5.4",
@@ -19,7 +18,7 @@
     "gulp-rev-css-url": "^0.1.0",
     "gulp-sass": "^2.0.4",
     "gulp-sourcemaps": "^1.6.0",
-    "gulp-uglify": "^1.4.1",
+    "gulp-uglify": "^1.5.3",
     "gulp-util": "^3.0.6",
     "main-bower-files": "^2.13.1",
     "run-sequence": "^1.2.1"

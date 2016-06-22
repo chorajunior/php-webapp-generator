@@ -13,7 +13,6 @@ var gulp                  = require( 'gulp' ),
     runSequence           = require( 'run-sequence' ),
     assetsRev             = require( 'gulp-rev' ),
     cssRev                = require( 'gulp-rev-css-url' ),
-    cssRebaseUrl          = require( 'gulp-css-rebase-urls' ),
     plumber               = require( 'gulp-plumber' ),
     manifest              = require( 'asset-builder' )( 'app/assets/config.json' ),
     replace               = require( 'gulp-replace' ),
@@ -26,8 +25,9 @@ var gulp                  = require( 'gulp' ),
     manifestRevOptions    = { base: '.', merge: true };
 
 var regexes = {
-    // This regex is responsible for "cleaning" the paths for images
-    css: /(url|src)\((['"]?)(.*(\/)(.*[gif|jpeg|jpg|png])\2\))/gm
+    // This regex is responsible for "cleaning" the paths for images in CSS
+    cssImages: /(url|src)\((['"])?([\.\/\w]+)\/([\w0-9-_]+\.)(gif|png|jpg|jpeg)\2\)/gm,
+    cssFonts: /(url|src)\((['"])?([\.\/\w]+)\/([\w0-9-_]+\.)(eot|svg|woff[2]?|ttf|otf)([\?#a-zA-Z0-9_-]+)?\2\)/gm
 };
 
 gulp.task( 'browserSync', [ 'plugins', 'scripts', 'styles', 'images', 'fonts' ], function () {
@@ -40,24 +40,23 @@ gulp.task( 'browserSync', [ 'plugins', 'scripts', 'styles', 'images', 'fonts' ],
     } );
 } );
 
-gulp.task( 'images', [ 'images-deploy' ] );
-
-// Compressing images & handle SVG files
-gulp.task( 'images-deploy', function () {
+/************************************************* App's assets tasks *************************************************/
+// Compressing images
+gulp.task( 'app-images', function () {
     return gulp.src( manifest.paths.source + '/images/**/*.{jpg,jpeg,png}' )
         .pipe( plumber() )
-        .pipe( imagemin( { optimizationLevel: 9, progressive: true, interlaced: true } ) )
+        .pipe( imagemin( { optimizationLevel: 6, progressive: true, interlaced: true } ) )
         .pipe( gulp.dest( manifest.paths.dist + '/images' ) );
 } );
 
 // Copying the system fonts
-gulp.task( 'fonts', function () {
+gulp.task( 'app-fonts', function () {
     return gulp.src( [ manifest.paths.source + '/fonts/**/' + fontExtensions ] )
         .pipe( gulp.dest( manifest.paths.dist + '/fonts' ) );
 } );
 
 // Compiling our JavaScripts
-gulp.task( 'scripts', function () {
+gulp.task( 'app-scripts', function () {
     return gulp.src( manifest.paths.source + '/scripts/**/*.js' )
         .pipe( plumber() )
         .pipe( concat( 'app.js' ) )
@@ -66,16 +65,8 @@ gulp.task( 'scripts', function () {
         .pipe( browserSync.reload( { stream: true } ) );
 } );
 
-// Compiling our JavaScripts for deployment
-gulp.task( 'scripts-deploy', function () {
-    return gulp.src( manifest.paths.dist + '/scripts/*.js' )
-        .pipe( plumber() )
-        .pipe( uglify() )
-        .pipe( gulp.dest( manifest.paths.dist + '/scripts/build' ) );
-} );
-
 // Compiling our SCSS files
-gulp.task( 'styles', function () {
+gulp.task( 'app-styles', function () {
     return gulp.src( manifest.paths.source + '/styles/main.scss' )
         .pipe( plumber( {
             errorHandler: function ( err ) {
@@ -94,23 +85,15 @@ gulp.task( 'styles', function () {
         .on( 'error', gutil.log )
         .pipe( concat( 'app.css' ) )
         .pipe( sourceMaps.write() )
+        .pipe( replace( regexes.cssImages, '$1($2../images/$4$5$2)' ) )
+        .pipe( replace( regexes.cssFonts, '$1($2../fonts/$4$5$2)' ) )
         .pipe( gulp.dest( manifest.paths.dist + '/styles' ) )
         .pipe( browserSync.reload( { stream: true } ) );
 } );
 
-// Preparing the already compiled CSS files do production
-gulp.task( 'styles-deploy', function () {
-    return gulp.src( manifest.paths.dist + '/styles/*.css' )
-        .pipe( plumber() )
-        .pipe( autoprefixer( {
-            browsers: autoPrefixBrowserList,
-            cascade : true
-        } ) )
-        .pipe( cssRebaseUrl( { root : manifest.paths.dist + '/build' } ) )
-        .pipe( cleanCss() )
-        .pipe( gulp.dest( manifest.paths.dist + '/styles' ) );
-} );
+gulp.task( 'app-assets', [ 'app-scripts', 'app-styles', 'app-images', 'app-fonts' ] );
 
+/************************************************ Plugins' assets tasks ***********************************************/
 // Handling plugin files
 gulp.task( 'plugins-fonts', function () {
     return gulp.src( mainBowerFiles( [ '/**/' + fontExtensions ] ) )
@@ -127,7 +110,8 @@ gulp.task( 'plugins-scripts', function () {
 gulp.task( 'plugins-styles', function () {
     return gulp.src( mainBowerFiles( [ '/**/*.css' ] ) )
         .pipe( concat( 'plugins.css' ) )
-        .pipe( replace( regexes.css, '$1($2../images/$5$2)' ) )
+        .pipe( replace( regexes.cssImages, '$1($2../images/$4$5$2)' ) )
+        .pipe( replace( regexes.cssFonts, '$1($2../fonts/$4$5$2)' ) )
         .pipe( gulp.dest( manifest.paths.dist + '/styles' ) );
 } );
 
@@ -136,9 +120,37 @@ gulp.task( 'plugins-images', function () {
         .pipe( gulp.dest( manifest.paths.dist + '/images' ) );
 } );
 
-// Just a shortcut to prepare the app's assets
-gulp.task( 'app-assets', [ 'scripts', 'styles', 'images', 'fonts' ] );
-gulp.task( 'plugins', [ 'plugins-fonts', 'plugins-scripts', 'plugins-styles', 'plugins-images' ] );
+gulp.task( 'plugins-assets', [ 'plugins-fonts', 'plugins-scripts', 'plugins-styles', 'plugins-images' ] );
+
+/************************************************ General' assets tasks ***********************************************/
+
+gulp.task( 'scripts-uglify', function() {
+    return gulp.src( manifest.paths.dist + '/build/scripts/*.js' )
+        .pipe( sourceMaps.init() )
+        .pipe( uglify() )
+        .pipe( sourceMaps.write( '.' ) )
+        .pipe( gulp.dest( manifest.paths.dist + '/build/scripts' ) );
+} );
+
+// Preparing the already compiled CSS files do production
+gulp.task( 'styles-deploy', function () {
+    return gulp.src( manifest.paths.dist + '/styles/*.css' )
+        .pipe( plumber() )
+        .pipe( autoprefixer( {
+            browsers: autoPrefixBrowserList,
+            cascade : true
+        } ) )
+        .pipe( gulp.dest( manifest.paths.dist + '/styles' ) );
+} );
+
+gulp.task( 'styles-uglify', function() {
+    return gulp.src( manifest.paths.dist + '/build/styles/*.css' )
+        .pipe( plumber() )
+        .pipe( cleanCss() )
+        .pipe( gulp.dest( manifest.paths.dist + '/build/styles' ) );
+} );
+
+/**************************************************** Utility tasks ***************************************************/
 
 gulp.task( 'clean', function () {
     return del( [ 'app/dist' ] );
@@ -152,10 +164,9 @@ gulp.task( 'watch', [ 'clean ', 'plugins', 'browserSync' ], function () {
     gulp.watch( 'app/templates/**/*.twig', browserSync.reload );
 } );
 
-// Build tasks
+// Generating hashes of the resources after all of them are placed on dist folder.
 gulp.task( 'hash-assets', function() {
-    // Generating hashes of the resources after all of them are placed on dist folder.
-    var assetsList = ['images', 'scripts', 'styles', 'fonts'],
+    var assetsList = [ 'images', 'scripts', 'styles', 'fonts' ],
         globs = [];
 
     // Generating all the globs we need
@@ -173,14 +184,15 @@ gulp.task( 'hash-assets', function() {
         .pipe( gulp.dest( manifest.paths.dist ) );
 } );
 
+// Building the assets
 gulp.task( 'build', function () {
     runSequence(
         'clean',
-        'scripts-deploy',
-        'fonts',
         'app-assets',
-        'plugins',
+        'plugins-assets',
         'styles-deploy',
-        'hash-assets'
+        'hash-assets',
+        'styles-uglify',
+        'scripts-uglify'
     );
 } );
