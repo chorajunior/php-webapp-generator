@@ -7,7 +7,7 @@ frameworks.
 Clone (or download) the repository to a folder and install the
 dependencies:
 ```
-$ git clone https://github.com/chorajunior/php-webapp-generator
+$ git clone https://github.com/juniorgarcia/php-webapp-generator
 $ cd php-webapp-generator
 $ composer install
 $ npm install
