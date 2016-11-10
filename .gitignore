@@ -1,9 +1,11 @@
 node_modules
-dist
+app/dist
 bower_components
 .idea
 .DS_Store
 .env
 app/cache
-vendor
+app/vendor
 .tmp
+yarn.lock
+*.log
