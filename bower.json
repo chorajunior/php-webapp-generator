@@ -2,10 +2,10 @@
   "name": "v01",
   "private": true,
   "dependencies": {
-    "jquery": "2",
     "bootstrap-sass": "~3.3.5",
-    "modernizr": "~2.8.1",
-    "bxslider-4": "^4.2.5"
+    "bxslider-4": "^4.2.5",
+    "jquery": "2",
+    "modernizr": "~2.8.1"
   },
   "overrides": {
     "bootstrap-sass": {

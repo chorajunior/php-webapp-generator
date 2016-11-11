@@ -1,25 +1,18 @@
 <?php
-/**
- * User: itamarjr91@gmail.com
- * Date: 06/06/16
- * Time: 21:45
- */
 
 namespace PHPAppGenerator;
-
-use Silex\Provider\VarDumperServiceProvider;
 
 class Assets
 {
     // The main paths
     public static $assetsFolder;
-    public static $baseAppDir;
+    public static $baseAppFolder;
     public static $scriptsFolder;
     public static $stylesFolder;
     public static $imagesFolder;
     public static $fontsFolder;
-    public static $buildDir;
-    public static $distDir;
+    public static $buildFolder;
+    public static $distFolder;
     public static $manifestFileContent;
 
     // The asset types
@@ -28,14 +21,14 @@ class Assets
     public function __construct()
     {
         // Initializing the variables that point to the default folders
-        self::$assetsFolder = getenv('ASSETS_DIR');
-        self::$buildDir = getenv('BUILD_DIR');
-        self::$distDir = getenv('DIST_DIR');
-        self::$baseAppDir = $_SERVER['DOCUMENT_ROOT'];
-        self::$scriptsFolder = getenv('SCRIPTS_DIR');
-        self::$stylesFolder = getenv('STYLES_DIR');
-        self::$imagesFolder = getenv('IMAGES_DIR');
-        self::$fontsFolder = getenv('FONTS_DIR');
+        self::$assetsFolder   = getenv('ASSETS_DIR');
+        self::$buildFolder    = getenv('BUILD_DIR');
+        self::$distFolder     = getenv('DIST_DIR');
+        self::$baseAppFolder  = $_SERVER['DOCUMENT_ROOT'] . '/';
+        self::$scriptsFolder  = getenv('SCRIPTS_DIR');
+        self::$stylesFolder   = getenv('STYLES_DIR');
+        self::$imagesFolder   = getenv('IMAGES_DIR');
+        self::$fontsFolder    = getenv('FONTS_DIR');
 
         self::initManifestFile();
     }
@@ -53,7 +46,7 @@ class Assets
                 return self::getProductionAsset($path);
             }
         } else {
-            return 'app/' . self::$distDir . '/' . self::$assetsFolder . '/' . $path;
+            return 'app/' . self::$distFolder . '/' . self::$assetsFolder . '/' . $path;
         }
         return null;
     }
@@ -74,11 +67,11 @@ class Assets
         }
 
         return 'app/' .
-        self::$distDir
+        self::$distFolder
         . '/' .
         self::$assetsFolder
         . '/' .
-        self::$buildDir
+        self::$buildFolder
         . '/' .
         $productionAssetPath;
     }
@@ -89,7 +82,7 @@ class Assets
      */
     private static function manifestFileExists()
     {
-        $manifestPath = self::$baseAppDir . 'app/' . self::$distDir . '/' . self::$assetsFolder . '/' . 'manifest.json';
+        $manifestPath = self::$baseAppFolder . 'app/' . self::$distFolder . '/' . self::$assetsFolder . '/' . 'manifest.json';
         return file_exists($manifestPath);
     }
 
@@ -120,7 +113,6 @@ class Assets
         } else {
             throw new \UnexpectedValueException("Invalid asset type \"${type}\".");
         }
-
         return $result;
     }
 
@@ -132,7 +124,7 @@ class Assets
     {
         self::$manifestFileContent = json_decode(
             file_get_contents(
-                self::$baseAppDir . 'app/' . self::$distDir . '/' . self::$assetsFolder . '/' . 'manifest.json'
+                self::$baseAppFolder . 'app/' . self::$distFolder . '/' . self::$assetsFolder . '/' . 'manifest.json'
             ),
             true
         );

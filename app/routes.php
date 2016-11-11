@@ -11,7 +11,7 @@ $dotenv->load();
 $dotenv->required(['ENV', 'SITE_TITLE']);
 
 // Setting the debug mode based on the current environment
-define('DEBUG', getenv('ENV') == 'development');
+define('DEBUG', getenv('ENV') !== 'production');
 
 /************************** Initializing the router using Silex: http://silex.sensiolabs.org/ *************************/
 $app = new Silex\Application(array('debug' => DEBUG));
