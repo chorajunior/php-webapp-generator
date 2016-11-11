@@ -13,6 +13,11 @@ class Assets
     public static $fontsFolder;
     public static $buildFolder;
     public static $distFolder;
+
+    /**
+     * Content of the manifest file.
+     * @var string
+     */
     public static $manifestFileContent;
 
     // The asset types
@@ -116,7 +121,6 @@ class Assets
         return $result;
     }
 
-
     /**
      * Initializing the manifest file for the production assets.
      */
@@ -128,6 +132,24 @@ class Assets
             ),
             true
         );
+    }
+
+    /**
+     * Get the app environment: development or production
+     * @return string
+     */
+    private function appEnv()
+    {
+        return getenv('ENV');
+    }
+
+    /**
+     * Confirms if the application is in development mode.
+     * @return bool
+     */
+    public static function isInDevelopmentMode()
+    {
+        return self::appEnv() !== 'production';
     }
 
     /**
