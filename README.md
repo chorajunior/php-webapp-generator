@@ -14,7 +14,7 @@ $ npm install
 $ bower install 
 ```
 
-##[Configuring the VirtualHost (Apache)](#configuring-virtual-host)
+##Configuring the VirtualHost (Apache)
 <br>You'll have to configure a VirtualHost on Apache to get it working.
 You can use this boilerplate:
 
@@ -61,7 +61,7 @@ only work in development mode, for obvious reasons.
 Question: [When I run `gulp watch` (and browserSync opens a new window for me in my browser), I got a blank page that
            never stops loading](#gulp-watch-dont-stop-loading-page).
 <br>Answer: Check the file `/app/assets/config.json` to see if the value for `config.devUrl` matches the virtual host
-you created. There is an example [in here](#configuring-virtual-host).
+you created. There is an example [in here](#configuring-the-virtualhost-apache).
 
 Question: [How can I add dependencies using Bower?](#how-to-add-dependencies-using-bower)
 <br>Answer: Using `bower install <dependency> --save (or --save-dev, as you need it)` will work as magic. That's because
