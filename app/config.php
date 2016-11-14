@@ -22,7 +22,7 @@ $app->register(new \Silex\Provider\TwigServiceProvider(), array(
 ));
 
 // Enabling Twig cache just if the environment is development
-if (DEBUG) {
+if (!DEBUG) {
     $app['twig']->setCache(__DIR__ . '/cache');
 }
 
