@@ -8,7 +8,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 /*************************************** Initializing the environment variables ***************************************/
 $dotenv = new \Dotenv\Dotenv($_SERVER['DOCUMENT_ROOT']);
 $dotenv->load();
-$dotenv->required(['ENV', 'SITE_TITLE']);
+$dotenv->required(['ENV', 'APP_TITLE']);
 
 // Setting the debug mode based on the current environment
 define('DEBUG', getenv('ENV') !== 'production');
