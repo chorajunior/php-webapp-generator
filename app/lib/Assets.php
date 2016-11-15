@@ -1,6 +1,8 @@
 <?php
 
-namespace PHPAppGenerator;
+namespace PHPWebAppGenerator;
+
+use PHPWebAppGenerator\Exceptions\ManifestFileNotFoundException;
 
 class Assets
 {
@@ -35,25 +37,30 @@ class Assets
         self::$imagesFolder   = getenv('IMAGES_DIR');
         self::$fontsFolder    = getenv('FONTS_DIR');
 
-        self::initManifestFile();
+        // Only initialize the manifest map if in production.
+        if(self::isInProductionMode()) {
+            self::initManifestFile();
+        }
     }
 
     /**
      * Returns the path of an asset it exists. Empty string, otherwise.
+     * @throws ManifestFileNotFoundException
      * @param string $path The path to the asset
      * @return string
      */
     public static function getAsset($path)
     {
-        if(getenv('ENV') == 'production') {
+        if(self::isInProductionMode()) {
             // Verifying the existence of the manifest with the asset's maps
             if(self::manifestFileExists()) {
                 return self::getProductionAsset($path);
+            } else {
+                throw new ManifestFileNotFoundException();
             }
         } else {
             return 'app/' . self::$distFolder . '/' . self::$assetsFolder . '/' . $path;
         }
-        return null;
     }
 
 
@@ -123,15 +130,20 @@ class Assets
 
     /**
      * Initializing the manifest file for the production assets.
+     * @throws ManifestFileNotFoundException
      */
     private static function initManifestFile()
     {
-        self::$manifestFileContent = json_decode(
-            file_get_contents(
-                self::$baseAppFolder . 'app/' . self::$distFolder . '/' . self::$assetsFolder . '/' . 'manifest.json'
-            ),
-            true
-        );
+        if (self::manifestFileExists()) {
+            self::$manifestFileContent = json_decode(
+                file_get_contents(
+                    self::$baseAppFolder . 'app/' . self::$distFolder . '/' . self::$assetsFolder . '/' . 'manifest.json'
+                ),
+                true
+            );
+        } else {
+            throw new ManifestFileNotFoundException();
+        }
     }
 
     /**
@@ -150,6 +162,15 @@ class Assets
     public static function isInDevelopmentMode()
     {
         return self::appEnv() !== 'production';
+    }
+
+    /**
+     * Checks if the app is in production mode.
+     * @return bool
+     */
+    public static function isInProductionMode()
+    {
+        return !self::isInDevelopmentMode();
     }
 
     /**
