@@ -33,23 +33,6 @@ var regexes = {
     cssFonts: /(url|src)\((['"])?([\.\/\w]+)\/([\w0-9-_]+\.)(eot|svg|woff[2]?|ttf|otf)([\?#a-zA-Z0-9_-]+)?\2\)/gm
 };
 
-//============================= Task aggregators =============================//
-gulp.task('all-styles', function () {
-    runSequence('plugins-styles', 'app-styles');
-});
-gulp.task('all-scripts', function () {
-    runSequence('plugins-scripts', 'app-scripts');
-});
-gulp.task('all-images', function () {
-    runSequence('plugins-images', 'app-images');
-});
-gulp.task('all-fonts', function () {
-    runSequence('plugins-fonts', 'app-fonts');
-});
-gulp.task('all-assets', function() {
-    runSequence('plugins-assets', 'app-assets');
-});
-
 //============================ App's assets tasks ============================//
 gulp.task('images-compress', function(){
     return gulp.src(manifest.paths.dist + '/images/**/*.{jpg,jpeg,png,gif}')
@@ -71,7 +54,8 @@ gulp.task('app-images', function () {
 // Copying the system fonts
 gulp.task('app-fonts', function () {
     return gulp.src([manifest.paths.source + '/fonts/**/' + fontExtensions])
-        .pipe(gulp.dest(manifest.paths.dist + '/fonts'));
+        .pipe(gulp.dest(manifest.paths.dist + '/fonts'))
+        .pipe(browserSync.stream());
 });
 
 // Compiling our JavaScripts
@@ -178,17 +162,23 @@ gulp.task('clean', function () {
     });
 });
 
-gulp.task('watch', function () {
-    gutil.log(gutil.colors.blue('Starting watch proccess.'));
-    runSequence('clean', 'all-assets');
+gulp.task('browserSync', function(){
     browserSync.init({
         proxy: manifest.config.devUrl,
         options: {
             reloadDelay: 250
         },
-        open: false,
         notify: true
     });
+});
+
+gulp.task('watch', function () {
+    gutil.log(gutil.colors.blue('Starting watch proccess.'));
+    runSequence('clean',
+        'app-fonts', 'app-scripts', 'app-styles', 'app-images',
+        'plugins-fonts', 'plugins-scripts', 'plugins-styles', 'plugins-images',
+        'browserSync'
+    );
     gulp.watch(manifest.paths.source + '/scripts/**/*.*', ['app-scripts']);
     gulp.watch(manifest.paths.source + '/styles/**/*.*', ['app-styles']);
     gulp.watch(manifest.paths.source + '/images/**/*.*', ['app-images']);
@@ -198,12 +188,13 @@ gulp.task('watch', function () {
 // Generating hashes of the resources after all of them are placed on dist
 // folder.
 gulp.task('hash-assets', function () {
+    gutil.log(gutil.colors.blue('Hashing the assets.'));
     var assetsList = ['images', 'scripts', 'styles', 'fonts'],
         globs      = [];
 
     // Generating all the globs we need
     for (resourceIndex in assetsList) {
-        globs.push(manifest.paths.dist + '/' + assetsList[resourceIndex] + '/*.*');
+        globs.push(manifest.paths.dist + '/' + assetsList[resourceIndex] + '/**/*.*');
     }
 
     // Hashing to the build folder
@@ -225,11 +216,12 @@ gulp.task('build', function () {
     gutil.log(gutil.colors.blue('Starting build proccess.'));
     runSequence(
         'clean',
-        'all-assets',
-        'hash-assets',
+        'app-fonts', 'app-scripts', 'app-styles', 'app-images',
+        'plugins-fonts', 'plugins-scripts', 'plugins-styles', 'plugins-images',
         'styles-deploy',
         'styles-uglify',
         'scripts-uglify',
-        'images-compress'
+        'images-compress',
+        'hash-assets'
     );
 });
