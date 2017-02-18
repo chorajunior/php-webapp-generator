@@ -36,7 +36,7 @@ The structure is really simple:
 (http://twig.sensiolabs.org) to make your templates.
 
 ## File Structure
-* **.env.example**: the base file for your .env file. Rename it and then,
+* **.env.example**: the base file for your .env file. Rename it do `.env` to make your app start working.
 * **app/bootstrap.php**: the file who bootstraps your application calling the dependencies and config file;
 * **app/config.php**: your main app's configuration is here;
 configure it as you wish. You **MUST** configure it. The structure of this file is self-explanatory and in most cases
