@@ -23,6 +23,10 @@ You can use this boilerplate:
     DocumentRoot /your/web/dir/your-app-folder
     ServerName yourapp.dev
     ServerAlias yourapp.dev
+
+    <Directory  /your/web/dir/your-app-folder>
+        AllowOverride All
+    </Directory>
 </VirtualHost>
 ```
 
