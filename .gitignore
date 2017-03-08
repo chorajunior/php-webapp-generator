@@ -1,6 +1,4 @@
 .idea
-app/dist
-app/cache
 app/vendor
 node_modules
 bower_components
@@ -9,3 +7,4 @@ bower_components
 .tmp
 *.log
 *.lock
+public/assets
