@@ -8,7 +8,7 @@
     ],
     "require": {
         "vlucas/phpdotenv": "*",
-        "twig/twig": "~1.0",
+        "twig/twig": "~1",
         "silex/silex": "~2.0"
     },
     "config": {

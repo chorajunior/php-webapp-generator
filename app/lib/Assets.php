@@ -59,10 +59,9 @@ class Assets
                 throw new ManifestFileNotFoundException();
             }
         } else {
-            return 'app/' . self::$distFolder . '/' . self::$assetsFolder . '/' . $path;
+            return 'public/' . self::$assetsFolder . '/' . $path;
         }
     }
-
 
     /**
      * Returns the asset for production.
@@ -78,9 +77,7 @@ class Assets
             throw new \UnexpectedValueException("There is no asset in the manifest file with the identifier: \"{$path}\"");
         }
 
-        return 'app/' .
-        self::$distFolder
-        . '/' .
+        return 'public/' .
         self::$assetsFolder
         . '/' .
         self::$buildFolder
@@ -94,7 +91,7 @@ class Assets
      */
     private static function manifestFileExists()
     {
-        $manifestPath = self::$baseAppFolder . 'app/' . self::$distFolder . '/' . self::$assetsFolder . '/' . 'manifest.json';
+        $manifestPath = self::$baseAppFolder . 'public/' . self::$assetsFolder . '/' . 'manifest.json';
         return file_exists($manifestPath);
     }
 
@@ -137,7 +134,7 @@ class Assets
         if (self::manifestFileExists()) {
             self::$manifestFileContent = json_decode(
                 file_get_contents(
-                    self::$baseAppFolder . 'app/' . self::$distFolder . '/' . self::$assetsFolder . '/' . 'manifest.json'
+                    self::$baseAppFolder . 'public/' . self::$assetsFolder . '/' . 'manifest.json'
                 ),
                 true
             );

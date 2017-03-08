@@ -19,6 +19,6 @@
   },
   "paths": {
     "source": "app/assets",
-    "dist": "app/dist/assets"
+    "dist": "public/assets"
   }
 }
