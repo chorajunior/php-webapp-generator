@@ -8,6 +8,4 @@ bower_components
 .env
 .tmp
 *.log
-
-*.lock
 public/assets
