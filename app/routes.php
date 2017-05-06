@@ -5,3 +5,7 @@
 $app->get('/', function() use($twig) {
     return $twig->render('index.twig');
 });
+
+$app->get('/test', function() use($twig) {
+    return $twig->render('test.twig');
+});

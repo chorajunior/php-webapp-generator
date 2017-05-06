@@ -14,7 +14,7 @@ $ npm install
 $ bower install 
 ```
 
-##Configuring the VirtualHost (Apache)
+## Configuring the VirtualHost (Apache)
 <br>You'll have to configure a VirtualHost on Apache to get it working.
 You can use this boilerplate:
 

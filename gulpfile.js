@@ -1,3 +1,4 @@
+// TODO Fix compressing issue to the production styles and scripts.
 var gulp                  = require('gulp'),
     gutil                 = require('gulp-util'),
     del                   = require('del'),
@@ -86,15 +87,7 @@ gulp.task('app-styles', function () {
         .pipe(browserSync.stream());
 });
 
-gulp.task('app-assets', function(){
-    runSequence('app-fonts', 'app-scripts', 'app-styles', 'app-images');
-});
-
 //=========================== Plugins' assets tasks ==========================//
-gulp.task('plugins-assets', function() {
-    runSequence('plugins-fonts', 'plugins-scripts', 'plugins-styles', 'plugins-images');
-});
-
 gulp.task('plugins-fonts', function () {
     return gulp.src(mainBowerFiles(['/**/' + fontExtensions]))
         .pipe(gulp.dest(manifest.paths.dist + '/fonts'));
@@ -121,18 +114,20 @@ gulp.task('plugins-images', function () {
         .pipe(gulp.dest(manifest.paths.dist + '/images'));
 });
 
-gulp.task('plugins-assets', function(){
-   runSequence('plugins-fonts', 'plugins-scripts',
-        'plugins-styles', 'plugins-images');
-});
-
-//=========================== General' assets tasks ==========================//
+//=========================== General assets tasks ==========================//
 gulp.task('scripts-uglify', function () {
-    return gulp.src(manifest.paths.dist + '/build/scripts/*.js')
+    return gulp.src(manifest.paths.dist + '/scripts/*.js')
         .pipe(sourceMaps.init())
         .pipe(uglify())
         .pipe(sourceMaps.write('.'))
-        .pipe(gulp.dest(manifest.paths.dist + '/build/scripts'));
+        .pipe(gulp.dest(manifest.paths.dist + '/scripts'));
+});
+
+gulp.task('styles-uglify', function () {
+    return gulp.src(manifest.paths.dist + '/styles/*.css')
+      .pipe(plumber())
+      .pipe(cleanCss())
+      .pipe(gulp.dest(manifest.paths.dist + '/styles'));
 });
 
 // Preparing the already compiled CSS files do production
@@ -146,18 +141,9 @@ gulp.task('styles-deploy', function () {
         .pipe(gulp.dest(manifest.paths.dist + '/styles'));
 });
 
-gulp.task('styles-uglify', function () {
-    return gulp.src(manifest.paths.dist + '/build/styles/*.css')
-        .pipe(plumber())
-        .pipe(sourceMaps.init())
-        .pipe(cleanCss())
-        .pipe(sourceMaps.write())
-        .pipe(gulp.dest(manifest.paths.dist + '/build/styles'));
-});
-
 //=============================== Utility tasks ==============================//
 gulp.task('clean', function () {
-    return del(['app/dist']).then(function(paths){
+    return del(['public/assets']).then(function(paths){
         gutil.log(gutil.colors.red('Deleted items: ' + paths.join(',')));
     });
 });
@@ -173,7 +159,7 @@ gulp.task('browserSync', function(){
 });
 
 gulp.task('watch', function () {
-    gutil.log(gutil.colors.blue('Starting watch proccess.'));
+    gutil.log(gutil.colors.blue('Starting watch process.'));
     runSequence('clean',
         'app-fonts', 'app-scripts', 'app-styles', 'app-images',
         'plugins-fonts', 'plugins-scripts', 'plugins-styles', 'plugins-images',
@@ -213,7 +199,7 @@ gulp.task('default', ['watch']);
 
 // Building the assets
 gulp.task('build', function () {
-    gutil.log(gutil.colors.blue('Starting build proccess.'));
+    gutil.log(gutil.colors.blue('Starting build process.'));
     runSequence(
         'clean',
         'app-fonts', 'app-scripts', 'app-styles', 'app-images',
