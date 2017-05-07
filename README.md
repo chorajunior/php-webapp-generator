@@ -53,7 +53,7 @@ application;
 
 
 
-##FAQ
+## FAQ
 Question: Do I need to use Twig?
 <br>Answer: **No!** You can use PHP files, HTML files, and so on. The file type does not matter since Silex will
 route for the file you tell it to. Altough, we recommend Twig, for it's really awesome and it's already configured to
