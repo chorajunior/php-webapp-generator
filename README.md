@@ -30,8 +30,8 @@ You can use this boilerplate:
 </VirtualHost>
 ```
 
-1. **Don't forget** to configure your hosts file to point "<your-app-url>" to localhost;
-2. **Don't forget** that your `DocumentRoot` **and** `<Dicrectory>` value must point to "<your-app-folder>/**public**".
+1. **Don't forget** to configure your hosts file to point "your-app-url" to localhost;
+2. **Don't forget** that your `DocumentRoot` **and** `<Dicrectory>` value must point to "your-app-folder/**public**".
 
 ## Folder structure
 The structure is really simple:
