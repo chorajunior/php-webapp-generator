@@ -20,17 +20,18 @@ You can use this boilerplate:
 
 ```
 <VirtualHost *:80>
-    DocumentRoot /your/web/dir/your-app-folder
+    DocumentRoot /your/web/dir/your-app-folder/public
     ServerName yourapp.dev
     ServerAlias yourapp.dev
 
-    <Directory  /your/web/dir/your-app-folder>
+    <Directory  /your/web/dir/your-app-folder/public>
         AllowOverride All
     </Directory>
 </VirtualHost>
 ```
 
-**Don't forget** to configure your hosts file to point "<your_app_url>" to localhost.
+1. **Don't forget** to configure your hosts file to point "<your-app-url>" to localhost;
+2. **Don't forget** that your `DocumentRoot` **and** `<Dicrectory>` value must point to "<your-app-folder>/**public**".
 
 ## Folder structure
 The structure is really simple:

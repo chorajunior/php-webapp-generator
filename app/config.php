@@ -6,7 +6,7 @@ use PHPWebAppGenerator\Assets;
 require_once __DIR__ . '/vendor/autoload.php';
 
 /*************************************** Initializing the environment variables ***************************************/
-$dotenv = new \Dotenv\Dotenv($_SERVER['DOCUMENT_ROOT']);
+$dotenv = new \Dotenv\Dotenv('../');
 $dotenv->load();
 $dotenv->required(array('ENV', 'APP_TITLE'));
 
