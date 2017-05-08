@@ -1,24 +1,17 @@
 {
-  "dependencies": {
-    "app.js": {
-      "files": [
-        "scripts/**/*.js",
-        "scripts/main.js"
-      ],
-      "main": true
-    },
-    "app.css": {
-      "files": [
-        "styles/main.scss"
-      ],
-      "main": true
-    }
-  },
+  "dependencies": {},
   "config": {
-    "devUrl": "phpgenerator.dev"
+    "devUrl": "phpwebappgenerator.dev"
   },
   "paths": {
-    "source": "app/assets",
-    "dist": "public/assets"
+    "appDir": "app",
+    "publicDir": "public",
+    "source": "assets",
+    "dist": "assets",
+    "build": "build",
+    "images": "images",
+    "styles": "styles",
+    "scripts": "scripts",
+    "fonts": "fonts"
   }
 }
