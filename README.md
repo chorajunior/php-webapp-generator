@@ -53,29 +53,9 @@ application;
 * **app/templates/index.twig**: the index file. Don't have to be this file. It's used only as example.
 
 ## FAQ
-Question: Do I need to use Twig?
-<br>Answer: **No!** You can use PHP files, HTML files, and so on. The file type does not matter since Silex will
-route for the file you tell it to. Altough, we recommend Twig, for it's really awesome and it's already configured to
-use our helper functions. Don't be afraid :)
-
-Question: [When I run `gulp watch`, assets don't show up. Why?](#assets-not-working)
-<br>Answer: Check in your .env file for the value of `ENV`. Make sure it's not in `production`. `watch` task will
-only work in development mode, for obvious reasons.
-
-Question: [When I run `gulp watch` (and browserSync opens a new window for me in my browser), I got a blank page that
-           never stops loading](#gulp-watch-dont-stop-loading-page).
-<br>Answer: Check the file `/app/assets/config.json` to see if the value for `config.devUrl` matches the virtual host
-that you created. There is an example [in here](#configuring-the-virtualhost-apache).
-
-Question: [How can I add dependencies using Bower?](#how-to-add-dependencies-using-bower)
-<br>Answer: Using `bower install <dependency> --save (or --save-dev, as you need it)` will work as magic. That's because
-the Gulp task who compiles your assets automatically reads your `bower.json` file and adds your dependencies.
-
-Question: [Can I change the assets folder's name?](#change-assets-folders-name)<br>
-Yes! This configuration is inside `/app/assets/config.json`. The key you will change is `paths`. To change the asset's dir names, you can change any of the `paths`' keys. Changes made here also reflect in the library used to retrieve the assets based on the environment (our `assets` function), so, you don't need to change the code responsible for this.
+Check out [our wiki](https://github.com/juniorgarcia/php-webapp-generator/wiki/FAQ).
 
 ## Projects we used as inspiration
 1. [Laravel](https://laravel.com/);
-2. [Sage Wordpress Theme](https://github.com/roots/sage);
+2. [Sage Wordpress Theme (main JavaScript file.)](https://github.com/roots/sage);
 3. [HTML 5 Boilerplate (.htaccess)](https://html5boilerplate.com/).
-2. [Sage Wordpress Theme](https://github.com/roots/sage).
