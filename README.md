@@ -31,8 +31,8 @@ You can use this boilerplate:
 </VirtualHost>
 ```
 
-1. **Don't forget** to configure your hosts file to point "<your-app-url>" to localhost;
-2. **Don't forget** that your `DocumentRoot` **and** `<Dicrectory>` value must point to "<your-app-folder>/**public**".
+1. **Don't forget** to configure your hosts file to point "your-app-url" to localhost;
+2. **Don't forget** that your `DocumentRoot` **and** `<Dicrectory>` value must point to "your-app-folder/**public**".
 
 ## Folder structure
 The structure is really simple:
@@ -78,3 +78,4 @@ Yes! This configuration is inside `/app/assets/config.json`. The key you will ch
 1. [Laravel](https://laravel.com/);
 2. [Sage Wordpress Theme](https://github.com/roots/sage);
 3. [HTML 5 Boilerplate (.htaccess)](https://html5boilerplate.com/).
+2. [Sage Wordpress Theme](https://github.com/roots/sage).
