@@ -1,2 +1,2 @@
 * text=auto
-.htaccess linguist-vendored
+*.htaccess linguist-vendored
